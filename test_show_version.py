@@ -1,15 +1,21 @@
-from ciscotool import show_version
+from ciscotool import get_show_version
 from unittest.mock import patch, MagicMock
 
 def test_get_show_version():
     mock_output = "Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M)"
+    device_params = {
+        "device_type": "cisco_ios",
+        "host": "1.2.3.4",
+        "username": "user",
+        "password": "pass",
+    }
 
-    # Correct patch path: patch where it's imported, not where it's used
     with patch("ciscotool.ConnectHandler") as mock_connect:
         mock_conn = MagicMock()
+        # Mock send_command() to return mock_output
         mock_conn.send_command.return_value = mock_output
-        mock_conn.disconnect.return_value = None
-        mock_connect.return_value = mock_conn
+        # Make the ConnectHandler() mock support the context manager
+        mock_connect.return_value.__enter__.return_value = mock_conn
 
-        result = show_version.get_show_version()
+        result = get_show_version(device_params)
         assert "Cisco IOS" in result
