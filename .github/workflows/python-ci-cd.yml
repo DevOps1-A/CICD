@@ -54,5 +54,4 @@ jobs:
           DEVICE_PASSWORD: ${{ secrets.DEVICE_PASSWORD }}
         run: |
           python main.py
-          - name: Run tests
 
