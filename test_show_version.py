@@ -3,6 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from ciscotool import show_version
+
 from unittest.mock import patch
 
 def test_get_show_version():
