@@ -5,27 +5,29 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:  # manual trigger
-  jobs:
-   build:
+  workflow_dispatch:
+
+jobs:
+  build:
     name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3     # Pulls your code from the repo
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Run tests
-      run: |
-        pytest              # Runs any script in Repo that starts/Ends with test_
+      - name: Run tests
+        run: |
+          pytest
 
   deploy:
     name: Deploy to Cisco Sandbox
@@ -33,21 +35,22 @@ on:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Run script on Cisco sandbox
-      env:
-        DEVICE_HOSTS: ${{ secrets.DEVICE_HOSTS }}
-        DEVICE_USERNAME: ${{ secrets.DEVICE_USERNAME }}
-        DEVICE_PASSWORD: ${{ secrets.DEVICE_PASSWORD }}
-      run: |
-        python main.py
+      - name: Run script on Cisco sandbox
+        env:
+          DEVICE_HOSTS: ${{ secrets.DEVICE_HOSTS }}
+          DEVICE_USERNAME: ${{ secrets.DEVICE_USERNAME }}
+          DEVICE_PASSWORD: ${{ secrets.DEVICE_PASSWORD }}
+        run: |
+          python main.py
